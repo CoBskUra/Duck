@@ -124,7 +124,7 @@ void Water::Draw(GLFWwindow* window, const Camera& camera, const Light* lights, 
 	normalsTexture.texUnit(shader, "heightMap", 0);
 	normalsTexture.Bind();
 	roomTexture->Bind();
-	roomTexture->texUnit(shader, "cubMap", GL_TEXTURE0);
+	roomTexture->texUnit(shader, "cubMap", 0);
 	vao.Bind();
 	{
 
