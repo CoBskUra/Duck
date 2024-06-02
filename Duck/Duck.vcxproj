@@ -218,8 +218,6 @@
   <ItemGroup>
     <None Include="duck_frag.glsl" />
     <None Include="duck_vert.glsl" />
-    <None Include="reflectionWordPhong_frag.glsl" />
-    <None Include="reflectionWordPhong_vert.glsl" />
     <None Include="phong_frag.glsl" />
     <None Include="phong_vert.glsl" />
     <None Include="room_frag.glsl" />

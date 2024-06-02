@@ -84,6 +84,8 @@ void Room::Draw(GLFWwindow* window, const Camera& camera, const Light* lights, i
 {
 	shader.Activate();
 	vao.Bind();
+	glActiveTexture(GL_TEXTURE0);
+
 	cubeMap.Bind();
 	cubeMap.texUnit(shader, "cubMap", GL_TEXTURE0);
 

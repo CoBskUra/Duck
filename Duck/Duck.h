@@ -12,7 +12,8 @@
 
 class Duck 
 {
-	Texture texture;
+	Texture duckNormals;
+	Texture duckSkin;
 	VAO vao;
 	Shader shader = StaticShaders::GetDuckShader();
 	int iesNum;

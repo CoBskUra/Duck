@@ -66,7 +66,9 @@ void Duck::CalculateDezierPoint() {
 //	vao_road.Unbind(); vbo.Unbind();
 //}
 
-Duck::Duck(int RoomWidth, int RoomDeep) : RoomWidth{RoomWidth}, RoomDeep{RoomDeep}, texture{"./duck_texMesh/ducktex.jpg", GL_TEXTURE_2D, GL_TEXTURE0, GL_RGB, GL_UNSIGNED_BYTE}
+Duck::Duck(int RoomWidth, int RoomDeep) : RoomWidth{RoomWidth}, RoomDeep{RoomDeep}, 
+duckSkin{"./duck_texMesh/ducktex.jpg", GL_TEXTURE_2D, 0, GL_RGB, GL_UNSIGNED_BYTE},
+duckNormals{ "./duck_texMesh/duck_normal_skin.jpg", GL_TEXTURE_2D, 1, GL_RGB, GL_UNSIGNED_BYTE }
 {
 
     std::ifstream file("./duck_texMesh/duck.txt");
@@ -108,7 +110,6 @@ Duck::Duck(int RoomWidth, int RoomDeep) : RoomWidth{RoomWidth}, RoomDeep{RoomDee
 	e_next = (g + f_next) * 0.5f;
 	NewDeborePoints();
 	//modelMtx = glm::scale(modelMtx, glm::vec3{ 1, 1, 1 } * 0.005f);
-
 }
 
 void Duck::Draw(GLFWwindow* window, const Camera& camera, const Light* lights, int lightsCount, glm::mat4 trans)
@@ -139,11 +140,25 @@ void Duck::Draw(GLFWwindow* window, const Camera& camera, const Light* lights, i
 	modelMtx = glm::scale(modelMtx, glm::vec3{ 1, 1, 1 } * scale);
 
 	shader.Activate();
-	texture.texUnit(shader, "duckSkin", 0);
-	texture.Bind();
-	vao.Bind(); 
-	
+	glActiveTexture(GL_TEXTURE0);
+	duckSkin.Bind();
+	duckSkin.texUnit(shader, "duckSkin", 0);
+	//duckSkin.Unbind();
+
+
+	glActiveTexture(GL_TEXTURE1);
+	duckNormals.Bind();
+	duckNormals.texUnit(shader, "duckNormals", 1);
+	//duckNormals.Unbind();
+	vao.Bind();
 	{
+		// Camera location
+		GLint viewPos = glGetUniformLocation(shader.ID, "viewPos");
+		auto cameraPos = camera.GetPosition();
+		glUniform3f(viewPos, cameraPos.x, cameraPos.y, cameraPos.z);
+
+		OpenGLHelper::loadLightUniform(shader.ID, lights, lightsCount, trans);
+
 		glUniformMatrix4fv(glGetUniformLocation(shader.ID, "MODEL_MATRIX"),
 			1, GL_FALSE, glm::value_ptr(trans * modelMtx));
 		camera.SaveMatrixToShader(shader.ID);
@@ -151,7 +166,8 @@ void Duck::Draw(GLFWwindow* window, const Camera& camera, const Light* lights, i
 		glDrawElements(GL_TRIANGLES, iesNum, GL_UNSIGNED_INT, 0);
 	}
 	vao.Unbind();
-	texture.Unbind();
+	duckNormals.Unbind();
+	duckSkin.Unbind();
 
 	//vao_road.Bind(); 
 	//{

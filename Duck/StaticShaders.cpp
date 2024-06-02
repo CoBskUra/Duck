@@ -71,7 +71,6 @@ void StaticShaders::Init()
 	simpleShader = { "simple_vert.glsl", "simple_frag.glsl" };
 	defaultShader = { "default.vert", "default.frag" };
 	phongShader = { "phong_vert.glsl", "phong_frag.glsl" };
-	reflectionWorldPhongShader = { "reflectionWordPhong_vert.glsl", "reflectionWordPhong_frag.glsl" };
 	duckShader = { "duck_vert.glsl", "duck_frag.glsl" };
 	waterShader = { "water_vert.glsl", "water_frag.glsl" };
 	roomShader = { "room_vert.glsl", "room_frag.glsl" };

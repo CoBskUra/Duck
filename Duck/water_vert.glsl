@@ -23,5 +23,5 @@ void main()
 
     texCord = tex;
 
-    Normal = mat3(transpose(inverse(MODEL_MATRIX))) * aNormal;
+    Normal = (MODEL_MATRIX * vec4(aNormal, 0)).xyz;
 }

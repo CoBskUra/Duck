@@ -268,12 +268,6 @@
     <None Include="vertexAndNormals_frag.glsl">
       <Filter>Resource Files\Shaders\VertexAndNormal</Filter>
     </None>
-    <None Include="reflectionWordPhong_frag.glsl">
-      <Filter>Resource Files\Shaders\lightings</Filter>
-    </None>
-    <None Include="reflectionWordPhong_vert.glsl">
-      <Filter>Resource Files\Shaders\lightings</Filter>
-    </None>
     <None Include="duck_frag.glsl">
       <Filter>Resource Files\Shaders\Duck</Filter>
     </None>

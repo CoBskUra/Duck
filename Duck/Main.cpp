@@ -19,10 +19,10 @@ unsigned int width = 1600;
 unsigned int height = 1024;
 const char* name = "DUCK";
 const int RoomWidth = 5, RoomDeep = 5;
-const float duckDisturbeValue = 10;
+const float duckDisturbeValue = 0;
 const int maxWaterDrops = 6;
-const float maxDisturbeValue = 50;
-const float waterLevel = 0;
+const float maxDisturbeValue = 5;
+const float waterLevel = -1.2;
 
 Camera camera(width, height, glm::vec3(0.0f, 0.0f, -5.0f));
 GLFWwindow* Init();

@@ -23,21 +23,6 @@ uniform vec3 viewPos;
 uniform float codeWaterHeight;
 uniform float maxWaterHeight;
 
-// vec3 normalMapping(vec3 N, vec3 T, vec3 tn)
-// {
-//     N = normalize(N);
-//     vec3 B = cross(N, T);
-//     B = normalize(B);
-//     T = cross(N, N);
-//     T = normalize(T);
-//     tn = normalize(tn);
-// 	
-//     mat3 TBN = mat3(T, B, N);
-//     vec3 world_normal = TBN * tn;
-//  
-//     return normalize(world_normal);
-// }
-
 vec3 Phong(vec3 worldPos, vec3 norm, vec3 view, vec3 fragColor)
 {
     vec3 ambientColor = vec3(0.0f);
@@ -90,21 +75,8 @@ float fresnel(vec3 N, vec3 V, float n1, float n2)
 void main()
 {
 // frag position update
-    vec3 pos = FragPos;
-    pos.y += texture(heightMap, texCord).a * codeWaterHeight * maxWaterHeight ; // by³o fajne jak u¿ywaliœmy phonga
-//  new normal vector
-    vec3 viewVec = normalize(viewPos - pos);
-                                                                    // niepotrzebne bo nie ma zakrzywieñ powierzchni
-                                                                    //vec3 N = normalize(Normal);
-                                                                    //    vec3 dPdx = dFdx(pos);
-                                                                    //    vec3 dPdy = dFdy(pos);
-                                                                    //    vec2 dtdx = dFdx(texCord);
-                                                                    //    vec2 dtdy = dFdy(texCord);
-                                                                    //    vec3 T = normalize(-dPdx*dtdy.y + dPdy*dtdx.y);
-                                                                    //
-    vec3 tn = texture(heightMap, texCord).rgb;
-                                                                    //    N = normalMapping(N, T, tn * 2.0f - 1.0);
-                                                                            
+    vec3 viewVec = normalize(viewPos - FragPos);              
+    vec3 tn = texture(heightMap, texCord).rgb;    
 
 // cubMap mapping
     vec3 norm = normalize(tn * 2.0f - 1.0);
@@ -128,7 +100,7 @@ void main()
     
     float f = fresnel(norm, viewVec, n1, n2);
     
-    vec3 result = (refractVec.x <= 0.0f || refractVec.y <= 0.0f || refractVec.z <= 0.0f) ? 
+    vec3 result = (refractVec.x != 0.0f || refractVec.y != 0.0f || refractVec.z != 0.0f) ? 
         refractColor + f * reflectColor : reflectColor;
     result = vec3(
         pow(result.x,  0.4545f),
@@ -137,10 +109,6 @@ void main()
     );
 
 // phong na mapingu
-    //result = Phong(pos, N, viewVec, result); // ostatecznie nie korzystamy z phonga
-    color = vec4(result, 1);
-    
-
-    //color = vec4(texture(heightMap, texCord).a, 1, 1,1) ;
+    color = vec4(texReflectCord, 1);
 }
 

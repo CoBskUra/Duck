@@ -51,7 +51,7 @@ void Water::NextSimulationStep()
 			if (j < N - 1)
 				neighbours_h += waterHeights_current[i][j + 1];
 
-			waterHeights_last[i][j] = dumping[i][j] * (A * neighbours_h + B * current_h - last_h);
+			waterHeights_last[i][j] = damping[i][j] * (A * neighbours_h + B * current_h - last_h);
 		}
 	}
 
@@ -68,17 +68,17 @@ Water::Water(float width, float height, float deep): width{width}, waterLevel{ h
 {
 	waterHeights_current = std::vector<std::vector<float>>(N);
 	waterHeights_last = std::vector<std::vector<float>>(N);
-	dumping = std::vector<std::vector<float>>(N);
+	damping = std::vector<std::vector<float>>(N);
 	for (int i = 0; i < N; i++) {
 		waterHeights_current[i] = std::vector<float>(N);
 		waterHeights_last[i] = std::vector<float>(N);
-		dumping[i] = std::vector<float>(N);
+		damping[i] = std::vector<float>(N);
 
 		for (int j = 0; j < N; j++) {
 			float l = fmin(i, N - i - 1);
 			l = fmin(fmin(l, j), N - 1 - j);
 			l = l / (float)N * 2.0f;
-			dumping[i][j] = 0.95f * fmin(1, l / 0.2f);
+			damping[i][j] = 0.95f * fmin(1, l / 0.2f);
 		}
 	}
 
@@ -121,10 +121,13 @@ void Water::Draw(GLFWwindow* window, const Camera& camera, const Light* lights, 
 	SaveHeightMap(normalsTexture);
 
 	shader.Activate();
+	glActiveTexture(GL_TEXTURE0);
 	normalsTexture.texUnit(shader, "heightMap", 0);
 	normalsTexture.Bind();
+	glActiveTexture(GL_TEXTURE1);
+
 	roomTexture->Bind();
-	roomTexture->texUnit(shader, "cubMap", 0);
+	roomTexture->texUnit(shader, "cubMap", 1);
 	vao.Bind();
 	{
 
@@ -144,10 +147,10 @@ void Water::Draw(GLFWwindow* window, const Camera& camera, const Light* lights, 
 			codeWaterHeight);
 
 		glUniform1f(glGetUniformLocation(shader.ID, "waterLevel"),
-			waterLevel);
+			(glm::inverse(*roomModelMtx) * glm::vec4(waterLevel)).y );
 
-		glUniformMatrix4fv(glGetUniformLocation(shader.ID, "MODEL_MATRIX"),
-			1, GL_FALSE, glm::value_ptr(trans * modelMtx));
+		//glUniformMatrix4fv(glGetUniformLocation(shader.ID, "MODEL_MATRIX"),
+		//	1, GL_FALSE, glm::value_ptr(trans * modelMtx));
 
 		glDrawElements(GL_TRIANGLES, iesNum, GL_UNSIGNED_INT, 0);
 	}

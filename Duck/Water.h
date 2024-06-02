@@ -16,7 +16,7 @@ class Water
 
 	std::vector<std::vector<float>> waterHeights_current;
 	std::vector<std::vector<float>> waterHeights_last;
-	std::vector<std::vector<float>> dumping;
+	std::vector<std::vector<float>> damping;
 
 	Texture normalsTexture{GL_TEXTURE_2D};
 	void SaveHeightMap(Texture& tex);
