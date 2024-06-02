@@ -23,7 +23,7 @@ in vec2 TexCoord;
 
 uniform vec3 viewPos;
 uniform sampler2D duckSkin;
-uniform sampler2D duckNormals;
+//uniform sampler2D duckNormals;
 
 
 

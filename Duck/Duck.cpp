@@ -146,9 +146,9 @@ void Duck::Draw(GLFWwindow* window, const Camera& camera, const Light* lights, i
 	//duckSkin.Unbind();
 
 
-	glActiveTexture(GL_TEXTURE1);
-	duckNormals.Bind();
-	duckNormals.texUnit(shader, "duckNormals", 1);
+	//glActiveTexture(GL_TEXTURE1);
+	//duckNormals.Bind();
+	//duckNormals.texUnit(shader, "duckNormals", 1);
 	//duckNormals.Unbind();
 	vao.Bind();
 	{
