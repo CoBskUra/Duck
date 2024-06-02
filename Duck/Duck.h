@@ -19,7 +19,7 @@ class Duck
 	int iesNum;
 	int vertNum;
 	const int RoomWidth, RoomDeep;
-	float journeyTime = 1;
+	float journeyTime = 10;
 	glm::vec3 b0{ 0,0,0 }, b1{ 0,0,0 }, b2{ 0,0,0 }, b3{ 0,0,0 };
 	glm::vec3 e{ 0,0,0 }, f{ 0,0,0 }, g{ 0,0,0 }, e_next{ 0,0,0 };
 	float startTime = 0;

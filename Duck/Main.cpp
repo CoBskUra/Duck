@@ -39,25 +39,25 @@ int main()
 	float deep = 30;
 
 
-	const int lightCount = 2;
+	const int lightCount = 1;
 	Light lights[lightCount];
 
 
 	Light light;
-	light.position = glm::vec3(0.0f, 8.0f, -width*0.5f - 5.0f);
+	light.position = glm::vec3(0.0f, 2.0f, 0);
 	light.ambient = glm::vec3(0.1f, 0.1f, 0.1f);
-	light.diffuse = glm::vec3(1.0f, 1.0f, 1.0f);
+	light.diffuse = glm::vec3(.4f, 0.5f, 0.5f);
 	light.specular = glm::vec3(0.5f, 0.5f, 0.5f);
 
 	lights[0] = light;
 
-	Light light2;
-	light2.position = glm::vec3(0.0f, 8.0f, 0);
-	light2.ambient = glm::vec3(0.1f, 0.1f, 0.1f);
-	light2.diffuse = glm::vec3(1.0f, 1.0f, 1.0f);
-	light2.specular = glm::vec3(0.5f, 1.0f, 0.5f);
+	//Light light2;
+	//light2.position = glm::vec3(0.0f, 8.0f, 0);
+	//light2.ambient = glm::vec3(0.1f, 0.1f, 0.1f);
+	//light2.diffuse = glm::vec3(1.0f, 1.0f, 1.0f);
+	//light2.specular = glm::vec3(0.5f, 1.0f, 0.5f);
 
-	lights[1] = light2;
+	//lights[1] = light2;
 	
 	Room room{ RoomWidth, 5, RoomDeep };
 	Duck duck{ RoomWidth, RoomDeep };

@@ -108,7 +108,7 @@ void main()
         pow(result.z,  0.4545f)
     );
 
-// phong na mapingu
-    color = vec4(texReflectCord, 1);
+// color
+    color = vec4(result, 1);
 }
 
