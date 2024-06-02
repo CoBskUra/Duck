@@ -40,8 +40,8 @@ void Duck::NewDeborePoints()
 	b2 = b3;
 	b3 = glm::vec3{ MathOperations::Random(-RoomWidth * 0.5f, RoomWidth * 0.5f), 0, MathOperations::Random(-RoomDeep * 0.5f, RoomDeep * 0.5f) } ;
 	
-	
-	CalculateBezierCurve();
+	/*
+	CalculateBezierCurve();*/
 }
 
 void Duck::CalculateDezierPoint() {
@@ -52,19 +52,19 @@ void Duck::CalculateDezierPoint() {
 	e_next /= 2.0f;
 }
 
-void Duck::CalculateBezierCurve()
-{
-	std::vector<float> vs;
-	OpenGLHelper::AddVecToVector(vs, b0);
-	OpenGLHelper::AddVecToVector(vs, b1);
-	OpenGLHelper::AddVecToVector(vs, b2);
-	OpenGLHelper::AddVecToVector(vs, b3);
-
-	vao_road.Bind();
-	VBO vbo(vs, GL_DYNAMIC_DRAW);
-	vao_road.LinkAttrib(0, 3, GL_FLOAT, false, 3 * sizeof(float), 0);
-	vao_road.Unbind(); vbo.Unbind();
-}
+//void Duck::CalculateBezierCurve()
+//{
+//	std::vector<float> vs;
+//	OpenGLHelper::AddVecToVector(vs, b0);
+//	OpenGLHelper::AddVecToVector(vs, b1);
+//	OpenGLHelper::AddVecToVector(vs, b2);
+//	OpenGLHelper::AddVecToVector(vs, b3);
+//
+//	vao_road.Bind();
+//	VBO vbo(vs, GL_DYNAMIC_DRAW);
+//	vao_road.LinkAttrib(0, 3, GL_FLOAT, false, 3 * sizeof(float), 0);
+//	vao_road.Unbind(); vbo.Unbind();
+//}
 
 Duck::Duck(int RoomWidth, int RoomDeep) : RoomWidth{RoomWidth}, RoomDeep{RoomDeep}, texture{"./duck_texMesh/ducktex.jpg", GL_TEXTURE_2D, GL_TEXTURE0, GL_RGB, GL_UNSIGNED_BYTE}
 {
@@ -153,17 +153,17 @@ void Duck::Draw(GLFWwindow* window, const Camera& camera, const Light* lights, i
 	vao.Unbind();
 	texture.Unbind();
 
-	vao_road.Bind(); 
-	{
-		glUniformMatrix4fv(glGetUniformLocation(shaderRoad.ID, "MODEL_MATRIX"),
-			1, GL_FALSE, glm::value_ptr(trans));
-		camera.SaveMatrixToShader(shaderRoad.ID);
-		glUniform4f(glGetUniformLocation(shaderRoad.ID, "COLOR"),
-			1, 1, 1, 1);
+	//vao_road.Bind(); 
+	//{
+	//	glUniformMatrix4fv(glGetUniformLocation(shaderRoad.ID, "MODEL_MATRIX"),
+	//		1, GL_FALSE, glm::value_ptr(trans));
+	//	camera.SaveMatrixToShader(shaderRoad.ID);
+	//	glUniform4f(glGetUniformLocation(shaderRoad.ID, "COLOR"),
+	//		1, 1, 1, 1);
 
-		glDrawArrays(GL_LINE_STRIP, 0, 4);
-	}
-	vao_road.Unbind();
+	//	glDrawArrays(GL_LINE_STRIP, 0, 4);
+	//}
+	//vao_road.Unbind();
 
 }
 

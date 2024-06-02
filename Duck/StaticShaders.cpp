@@ -8,6 +8,7 @@ Shader StaticShaders::phongShader;
 Shader StaticShaders::reflectionWorldPhongShader;
 Shader StaticShaders::duckShader;
 Shader StaticShaders::waterShader;
+Shader StaticShaders::roomShader;
 
 Shader StaticShaders::GetSimpleShader() {
 	return simpleShader;
@@ -36,6 +37,11 @@ Shader StaticShaders::GetDuckShader()
 Shader StaticShaders::GetWaterShader()
 {
 	return waterShader;
+}
+
+Shader StaticShaders::GetRoomShader()
+{
+	return roomShader;
 }
 
 void StaticShaders::MustHaveShaderInput(VAO vao, GLuint shaderId, const Camera& camera, const Light* lights, int lightsCount, glm::mat4 modelMtx)
@@ -68,4 +74,5 @@ void StaticShaders::Init()
 	reflectionWorldPhongShader = { "reflectionWordPhong_vert.glsl", "reflectionWordPhong_frag.glsl" };
 	duckShader = { "duck_vert.glsl", "duck_frag.glsl" };
 	waterShader = { "water_vert.glsl", "water_frag.glsl" };
+	roomShader = { "room_vert.glsl", "room_frag.glsl" };
 }

@@ -11,9 +11,11 @@ class Texture
 public:
 	GLuint ID;
 	GLenum type;
-	GLenum slot;
-	Texture(GLenum texType, GLenum slot);
+	Texture(GLenum texType);
+	Texture(std::vector<std::string> faces);
 	Texture(const char* image, GLenum texType, GLenum slot, GLenum format, GLenum pixelType);
+
+	unsigned int loadCubemap(std::vector<std::string> faces);
 
 	// Assigns a texture unit to a texture
 	void texUnit(Shader& shader, const char* uniform, GLuint unit);

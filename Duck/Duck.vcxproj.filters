@@ -64,6 +64,9 @@
     <Filter Include="Resource Files\Shaders\Water">
       <UniqueIdentifier>{dea03c79-0949-4f58-aa87-fd8325ca8bf2}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Resource Files\Shaders\Room">
+      <UniqueIdentifier>{693c664d-f7a8-4dca-8069-5f8e59cddd70}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="glad.c">
@@ -113,9 +116,6 @@
     </ClCompile>
     <ClCompile Include="QuaternionRotationImGui.cpp">
       <Filter>Source Files\Transformations</Filter>
-    </ClCompile>
-    <ClCompile Include="Robot.cpp">
-      <Filter>Source Files\ScensObjects</Filter>
     </ClCompile>
     <ClCompile Include="StaticShaders.cpp">
       <Filter>Source Files\ShaderManadement</Filter>
@@ -218,14 +218,8 @@
     <ClInclude Include="QuaternionRotationImGui.h">
       <Filter>Header Files\Transformations</Filter>
     </ClInclude>
-    <ClInclude Include="Robot.h">
-      <Filter>Header Files\ScensObjects</Filter>
-    </ClInclude>
     <ClInclude Include="AszkalMeshReader.h">
       <Filter>Header Files\Helper</Filter>
-    </ClInclude>
-    <ClInclude Include="RobotsPartInfo.h">
-      <Filter>Header Files\ScensObjects</Filter>
     </ClInclude>
     <ClInclude Include="Light.h">
       <Filter>Header Files\ScensObjects</Filter>
@@ -291,6 +285,12 @@
     </None>
     <None Include="water_frag.glsl">
       <Filter>Resource Files\Shaders\Water</Filter>
+    </None>
+    <None Include="room_vert.glsl">
+      <Filter>Resource Files\Shaders\Room</Filter>
+    </None>
+    <None Include="room_frag.glsl">
+      <Filter>Resource Files\Shaders\Room</Filter>
     </None>
   </ItemGroup>
   <ItemGroup>

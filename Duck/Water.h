@@ -9,7 +9,7 @@ class Water
 {
 	VAO vao;
 	Shader shader = StaticShaders::GetWaterShader();
-	float height;
+	float waterLevel;
 	float width;
 	float deep;
 	const GLuint iesNum{6};
@@ -18,8 +18,7 @@ class Water
 	std::vector<std::vector<float>> waterHeights_last;
 	std::vector<std::vector<float>> dumping;
 
-	Texture texture;
-	Texture normalsTexture{GL_TEXTURE_2D, GL_TEXTURE0};
+	Texture normalsTexture{GL_TEXTURE_2D};
 	void SaveHeightMap(Texture& tex);
 	void NextSimulationStep();
 	const float codeWaterHeight = 128.0f;
@@ -34,6 +33,9 @@ public:
 	const float B = 2.0f * (1 - 2.0f * A);
 
 	glm::mat4 modelMtx{ 1.0f };
+	Texture *roomTexture;
+	glm::mat4 *roomModelMtx;
+
 	Water(float width, float height, float deep);
 	void virtual Draw(GLFWwindow* window, const Camera& camera, const Light* lights, int lightsCount, glm::mat4 trans = glm::mat4{ 1.0f });
 	void UserInterfers();

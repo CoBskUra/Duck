@@ -12,15 +12,16 @@ void Water::SaveHeightMap(Texture& tex)
 			float heightD = waterHeights_current[y - 1][x];
 			float heightU = waterHeights_current[y + 1][x];
 
-			glm::vec3 dx = glm::normalize(glm::vec3(1.0f, 0.0f, heightR - heightL));
-			glm::vec3 dy = glm::normalize(glm::vec3(0.0f, 1.0f, heightU - heightD));
-			glm::vec3 normal = glm::normalize(glm::cross(dx, dy));
+			glm::vec3 dx = glm::normalize(glm::vec3(1.0f, heightR - heightL, 0.0f));
+			glm::vec3 dz = glm::normalize(glm::vec3(0.0f, heightU - heightD, 1.0));
+			glm::vec3 normal = glm::normalize(glm::cross(dz, dx));
 
+			normal = normal*0.5f + 0.5f;
 			int index = (y * N + x) * 4;
 			data[index + 0] = normal.x;	// R
 			data[index + 1] = normal.y; // waterHeights_current[y][x];//rand()/(float) RAND_MAX; // G
 			data[index + 2] = normal.z;	// B
-			data[index + 3] = waterHeights_current[y][x] / 100.0f;	// A
+			data[index + 3] = waterHeights_current[y][x] / codeWaterHeight;	// A
 		}
 	}
 
@@ -63,8 +64,7 @@ void Water::NextSimulationStep()
 	}
 }
 
-Water::Water(float width, float height, float deep): width{width + 0.7f}, height{ height }, deep{ deep + 0.7f },
-texture{ "./Textures/patched-brickwork_normal-dx.png", GL_TEXTURE_2D, GL_TEXTURE0, GL_RGB, GL_UNSIGNED_BYTE }
+Water::Water(float width, float height, float deep): width{width}, waterLevel{ height }, deep{ deep}
 {
 	waterHeights_current = std::vector<std::vector<float>>(N);
 	waterHeights_last = std::vector<std::vector<float>>(N);
@@ -84,10 +84,10 @@ texture{ "./Textures/patched-brickwork_normal-dx.png", GL_TEXTURE_2D, GL_TEXTURE
 
 	// Location, Normal, Color
 	std::vector<float> wallVs = {
-		-1, 0, -1,	 0, 1, 0,	 0.3f, 0.6f, 0.8f,	+0, +0,
-		-1, 0, +1,	 0, 1, 0,	 0.1f, 0.6f, 0.5f,	+0, +1,
-		+1, 0, +1,	 0, 1, 0,	 0.1f, 0.5f, 0.5f,	+1, +1,
-		+1, 0, -1,	 0, 1, 0,	 0.3f, 0.3f, 1.0f,	+1, +0,
+		-1, 0, -1,	 0, 1, 0,	+0, +0,
+		-1, 0, +1,	 0, 1, 0,	+0, +1,
+		+1, 0, +1,	 0, 1, 0,	+1, +1,
+		+1, 0, -1,	 0, 1, 0,	+1, +0,
 	};
 
 	std::vector<GLuint> wallIes = {
@@ -99,15 +99,14 @@ texture{ "./Textures/patched-brickwork_normal-dx.png", GL_TEXTURE_2D, GL_TEXTURE
 	VBO vbo(wallVs, GL_STATIC_DRAW);
 	EBO ebo(wallIes);
 
-	vao.LinkAttrib(0, 3, GL_FLOAT, false, 11 * sizeof(float), 0);
-	vao.LinkAttrib(1, 3, GL_FLOAT, false, 11 * sizeof(float), (void*)(3 * sizeof(float)));
-	vao.LinkAttrib(2, 3, GL_FLOAT, false, 11 * sizeof(float), (void*)(6 * sizeof(float)));
-	vao.LinkAttrib(3, 2, GL_FLOAT, false, 11 * sizeof(float), (void*)(9 * sizeof(float)));
+	vao.LinkAttrib(0, 3, GL_FLOAT, false, 8 * sizeof(float), 0);
+	vao.LinkAttrib(1, 3, GL_FLOAT, false, 8 * sizeof(float), (void*)(3 * sizeof(float)));
+	vao.LinkAttrib(2, 2, GL_FLOAT, false, 8 * sizeof(float), (void*)(6 * sizeof(float)));
 
 	vao.Unbind(); vbo.Unbind(); ebo.Unbind();
 
 	glm::mat4 trans = glm::mat4(1.0f);
-	trans = glm::translate(trans, glm::vec3(0.0, this->height, 0.0));
+	trans = glm::translate(trans, glm::vec3(0.0, this->waterLevel, 0.0));
 	trans = glm::scale(trans, glm::vec3(this->width * 0.5f, 1, this->deep * 0.5f));
 	modelMtx = trans;
 
@@ -118,19 +117,14 @@ texture{ "./Textures/patched-brickwork_normal-dx.png", GL_TEXTURE_2D, GL_TEXTURE
 
 void Water::Draw(GLFWwindow* window, const Camera& camera, const Light* lights, int lightsCount, glm::mat4 trans)
 {
-	/*if ((glfwGetTime() - lastTime) > delta * 100) {
-		int range = (glfwGetTime() - lastTime) / delta / 100;
-		lastTime = glfwGetTime();
-		for(int  i = 0; i < 1; i++)*/
-			NextSimulationStep();
-
-		/*
-	}*/
+	NextSimulationStep();
 	SaveHeightMap(normalsTexture);
 
 	shader.Activate();
 	normalsTexture.texUnit(shader, "heightMap", 0);
 	normalsTexture.Bind();
+	roomTexture->Bind();
+	roomTexture->texUnit(shader, "cubMap", GL_TEXTURE0);
 	vao.Bind();
 	{
 
@@ -149,6 +143,9 @@ void Water::Draw(GLFWwindow* window, const Camera& camera, const Light* lights, 
 		glUniform1f(glGetUniformLocation(shader.ID, "codeWaterHeight"),
 			codeWaterHeight);
 
+		glUniform1f(glGetUniformLocation(shader.ID, "waterLevel"),
+			waterLevel);
+
 		glUniformMatrix4fv(glGetUniformLocation(shader.ID, "MODEL_MATRIX"),
 			1, GL_FALSE, glm::value_ptr(trans * modelMtx));
 
@@ -156,6 +153,8 @@ void Water::Draw(GLFWwindow* window, const Camera& camera, const Light* lights, 
 	}
 	vao.Unbind();
 	normalsTexture.Unbind();
+	roomTexture->Unbind();
+
 }
 
 void Water::UserInterfers()

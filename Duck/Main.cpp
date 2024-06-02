@@ -10,7 +10,6 @@
 #include "Libraries/include/ImGui/imgui_impl_opengl3.h"
 #include "Camera.h"
 #include "VAO.h"
-#include "Robot.h"
 #include "StaticShaders.h"
 #include"Duck.h"
 #include "Room.h"
@@ -21,8 +20,9 @@ unsigned int height = 1024;
 const char* name = "DUCK";
 const int RoomWidth = 5, RoomDeep = 5;
 const float duckDisturbeValue = 10;
-const int maxWaterDrops = 10;
-const float maxDisturbeValue = 100;
+const int maxWaterDrops = 6;
+const float maxDisturbeValue = 50;
+const float waterLevel = 0;
 
 Camera camera(width, height, glm::vec3(0.0f, 0.0f, -5.0f));
 GLFWwindow* Init();
@@ -42,10 +42,9 @@ int main()
 	const int lightCount = 2;
 	Light lights[lightCount];
 
-	float startPos_y = height * 0.5f - 1.0f;
 
 	Light light;
-	light.position = glm::vec3(0.0f, startPos_y + 8.0f, -width*0.5f - 5.0f);
+	light.position = glm::vec3(0.0f, 8.0f, -width*0.5f - 5.0f);
 	light.ambient = glm::vec3(0.1f, 0.1f, 0.1f);
 	light.diffuse = glm::vec3(1.0f, 1.0f, 1.0f);
 	light.specular = glm::vec3(0.5f, 0.5f, 0.5f);
@@ -53,7 +52,7 @@ int main()
 	lights[0] = light;
 
 	Light light2;
-	light2.position = glm::vec3(0.0f, startPos_y + 8.0f, 0);
+	light2.position = glm::vec3(0.0f, 8.0f, 0);
 	light2.ambient = glm::vec3(0.1f, 0.1f, 0.1f);
 	light2.diffuse = glm::vec3(1.0f, 1.0f, 1.0f);
 	light2.specular = glm::vec3(0.5f, 1.0f, 0.5f);
@@ -62,7 +61,10 @@ int main()
 	
 	Room room{ RoomWidth, 5, RoomDeep };
 	Duck duck{ RoomWidth, RoomDeep };
-	Water water{ RoomWidth, 0, RoomDeep };
+	Water water{ RoomWidth, waterLevel, RoomDeep };
+	water.roomModelMtx = &room.modelMtx;
+	water.roomTexture = &room.cubeMap;
+	duck.watterLevel = waterLevel;
 
 	////////////////////////////////
 	// Main while loop

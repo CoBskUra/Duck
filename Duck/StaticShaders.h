@@ -13,6 +13,7 @@ static struct StaticShaders{
 	static Shader GetReflectionWorldPhongShader();
 	static Shader GetDuckShader();
 	static Shader GetWaterShader();
+	static Shader GetRoomShader();
 
 	static void MustHaveShaderInput(VAO vao, GLuint shaderId, const Camera& camera, 
 		const Light* lights, int lightsCount, glm::mat4 modelMtx);
@@ -25,4 +26,5 @@ private:
 	static Shader reflectionWorldPhongShader;
 	static Shader duckShader;
 	static Shader waterShader;
+	static Shader roomShader;
 };
