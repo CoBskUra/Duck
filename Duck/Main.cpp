@@ -19,7 +19,7 @@ unsigned int width = 1600;
 unsigned int height = 1024;
 const char* name = "DUCK";
 const int RoomWidth = 5, RoomDeep = 5;
-const float duckDisturbeValue = 0;
+const float duckDisturbeValue = 5;
 const int maxWaterDrops = 6;
 const float maxDisturbeValue = 5;
 const float waterLevel = -1.2;
